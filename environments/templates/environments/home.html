@@ -1,0 +1,40 @@
+{% extends "environments/base.html" %}
+{% block content %}
+	{% for env in env %}
+		<article class="media content-section">
+			<img class="rounded-circle article-img" src="{{ env.author.profile.image.url }}">
+		  <div class="media-body">
+		    <div class="article-metadata">
+		      <a class="mr-2" href="{% url 'user-env' %}">{{ env.author }}</a>
+		      <small class="text-muted">{{ env.date_created|date:"F d, Y" }}</small>
+		    </div>
+		    <h2><a class="article-title" href="{% url 'env-detail' %}">{{ env.name }}</a></h2>
+		    <p class="article-content">{{ env.Description }} {{ env.platform }} {{ env.database }} {{ env.run_stack }}
+            {{ env.web_server }} {{ env.ip }} {{ env.hardware }} {{ env.product_app }}
+            {{ env.provider }} {{ env.port }} {{ env.created_by }} {{ env.status }}</p>
+		  </div>
+		</article>
+	{% endfor %}
+	{% if is_paginated %}
+
+		{% if page_obj.has_previous %}
+			<a class="btn btn-outline-info mb-4" href="?page=1">Fisrt</a>
+			<a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+		{% endif %}
+
+		{% for num in page_obj.paginator.page_range %}
+			{% if page_obj.number == num %}
+				<a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+			{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+				<a class="btn btn-outlnie-info mb-4" href="?page={{ num }}">{{ num }}</a>
+			{% endif %}
+		{% endfor %}
+
+
+		{% if page_obj.has_next %}
+			<a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number">Next</a>
+			<a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+		{% endif %}
+
+	{% endif %}
+{% endblock content %}
